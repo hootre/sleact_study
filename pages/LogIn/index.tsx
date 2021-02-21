@@ -8,7 +8,7 @@ import useSWR from 'swr';
 
 const LogIn = () => {
   const { data, error, revalidate, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
-
+  // useSWR 3번째 인자로 dedupingInterval : 100000와 같이 시간을 정할 수 있다
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
