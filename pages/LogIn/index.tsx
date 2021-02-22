@@ -8,7 +8,10 @@ import useSWR from 'swr';
 
 const LogIn = () => {
   const { data, error, revalidate, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
-  // useSWR 3번째 인자로 dedupingInterval : 100000와 같이 시간을 정할 수 있다
+  // useSWR 3번째 인자로 dedupingInterval : 캐쉬 유지 시간이다 이 기간동안 더 요청해도 무시된다
+  const testData = useSWR('hello', (key) => {
+    return key;
+  });
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -25,7 +28,8 @@ const LogIn = () => {
           },
         )
         .then((response) => {
-          mutate(response.data, false);
+          // revalidate(); --> 서버의 요청을해서 데이터를 가져옴
+          mutate(response.data, false); // 주어진 데이터로 수정함 2번쨰 인자는 서버의 요청해서 데이터를 확인하는 인자 (OPTIMISTIC UI)선 조취 후 보고 기능
         })
         .catch((error) => {
           setLogInError(error.response?.data?.statusCode === 401);
@@ -39,7 +43,7 @@ const LogIn = () => {
   }
 
   if (data) {
-    return <Redirect to="/workspace/channel" />;
+    return <Redirect to="/workspace/sleact/channel/일반" />;
   }
 
   // console.log(error, userData);
