@@ -7,7 +7,7 @@ import { Link, Redirect } from 'react-router-dom';
 import useSWR from 'swr';
 
 const LogIn = () => {
-  const { data, error, revalidate, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
+  const { data, error, revalidate, mutate } = useSWR('/api/users', fetcher);
   // useSWR 3번째 인자로 dedupingInterval : 캐쉬 유지 시간이다 이 기간동안 더 요청해도 무시된다
   const testData = useSWR('hello', (key) => {
     return key;
@@ -21,7 +21,7 @@ const LogIn = () => {
       setLogInError(false);
       axios
         .post(
-          'http://localhost:3095/api/users/login',
+          '/api/users/login',
           { email, password },
           {
             withCredentials: true, // 백엔드와 프론트끼리 Cookie를 주고받을 수 있어진다 -- 쿠키는 백엔드에서 생성을 해준다

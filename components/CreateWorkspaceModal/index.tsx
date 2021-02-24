@@ -17,7 +17,7 @@ interface Props {
 const CreateWorkspaceModal: VFC<Props> = ({ show, onCloseModal, setShowCreateWorkspaceModal }) => {
   const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
-  const { data: userData, error, revalidate } = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
+  const { data: userData, error, revalidate } = useSWR<IUser | false>('/api/users', fetcher);
 
   const onCreateWorkspace = useCallback(
     (e) => {
@@ -27,7 +27,7 @@ const CreateWorkspaceModal: VFC<Props> = ({ show, onCloseModal, setShowCreateWor
       if (!newWorkspace) return;
       axios
         .post(
-          'http://localhost:3095/api/workspaces',
+          '/api/workspaces',
           {
             workspace: newWorkspace,
             url: newUrl,

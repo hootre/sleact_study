@@ -73,12 +73,12 @@ const config: webpack.Configuration = {
     historyApiFallback: true, // react router
     port: 3090,
     publicPath: '/dist/',
-    // proxy: {
-    //   '/api/': {
-    //     target: 'http://localhost:3095', // /api/로 보낼때 보내는 이름을 이와같이 정한다 원래 백엔드 서버랑 보내는 서버 주소가 다르면 오류가 나는데 이렇게 우회하는거임
-    //     changeOrigin: true,
-    //   },
-    // },
+    proxy: {
+      '/api/': {
+        target: 'http://localhost:3095', // /api/로 보낼때 보내는 이름을 이와같이 정한다 원래 백엔드 서버랑 보내는 서버 주소가 다르면 오류가 나는데 이렇게 우회하는거임
+        changeOrigin: true,
+      },
+    },
   },
 };
 
