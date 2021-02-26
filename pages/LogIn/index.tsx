@@ -28,8 +28,8 @@ const LogIn = () => {
           },
         )
         .then((response) => {
-          // revalidate(); --> 서버의 요청을해서 데이터를 가져옴
-          mutate(response.data, false); // 주어진 데이터로 수정함 2번쨰 인자는 서버의 요청해서 데이터를 확인하는 인자 (OPTIMISTIC UI)선 조취 후 보고 기능
+          revalidate();
+          // mutate(response.data, false); // 주어진 데이터로 수정함 2번쨰 인자는 서버의 요청해서 데이터를 확인하는 인자 (OPTIMISTIC UI)선 조취 후 보고 기능
         })
         .catch((error) => {
           setLogInError(error.response?.data?.statusCode === 401);

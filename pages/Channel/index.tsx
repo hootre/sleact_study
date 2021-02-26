@@ -11,7 +11,7 @@ import { Container, Header } from './styles';
 
 const Channel = () => {
   const { workspace, channel, id } = useParams<{ workspace: string; channel: string; id: string }>();
-  const { data: channelsData } = useSWR<IChannel[]>(`/api/workspaces/${workspace}/channels`, fetcher);
+  const { data: channelData } = useSWR<IChannel[]>(`/api/workspaces/${workspace}/channels`, fetcher);
   const { data: myData } = useSWR(`/api/users`, fetcher);
   const { data: chatData, mutate: mutateChat, revalidate } = useSWR<IChat[]>(
     `/api/workspaces/${workspace}/channels/${channel}/chats?perPage=20&page=1`,
@@ -35,15 +35,13 @@ const Channel = () => {
     [chat],
   );
 
-  if (!channelsData || !myData) {
+  if (!channelData || !myData) {
     return null;
   }
   return (
     <Container>
       <Header>채널!</Header>
-      {chatData?.map((item) => {
-        console.log(item.content);
-      })}
+      {chatData?.map((item) => {})}
       <ChatList />
       <ChatBox chat={chat} onSubmitForm={onSubmitForm} onChangeChat={onChangeChat} placeholder="채팅을 입력하세요" />
     </Container>

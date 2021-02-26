@@ -1,6 +1,6 @@
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useCallback, useState, VFC } from 'react';
+import React, { useCallback, useEffect, useState, VFC } from 'react';
 import { Redirect, Route, Switch, useParams } from 'react-router';
 import useSWR from 'swr';
 import {
@@ -30,6 +30,7 @@ import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
 import InviteChannelModal from '@components/InviteChannelModal';
 import ChannelList from '@components/ChannelList';
 import DMList from '@components/DMList';
+import useSocket from '@hooks/useSocket';
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
@@ -41,9 +42,24 @@ const Workspace: VFC = () => {
   const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
   const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
 
+  const { workspace, channel } = useParams<{ workspace: string; channel: string }>();
   const { data: userData, revalidate, mutate } = useSWR<IUser | false>('/api/users', fetcher, {
     dedupingInterval: 2000, // 2초 캐쉬 유지기간이다
   });
+  const { data: channelData } = useSWR<IChannel[]>(`/api/workspaces/${workspace}/channels`, fetcher);
+  const [socket, disconnect] = useSocket(workspace);
+  useEffect(() => {
+    if (channelData && userData && socket) {
+      console.log(socket);
+      socket.emit('login', { id: userData.id, channels: channelData.map((v) => v.id) });
+    }
+  }, [socket, channelData, userData]);
+
+  useEffect(() => {
+    return () => {
+      disconnect();
+    };
+  }, [workspace, disconnect]);
   const onLogout = useCallback(() => {
     axios
       .post('/api/users/logout', null, {
